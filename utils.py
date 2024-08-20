@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
+from timeit import default_timer as timer
 
 
 def plot_decision_boundary(model: torch.nn.Module, X: torch.Tensor, y: torch.Tensor):
@@ -38,6 +39,13 @@ def plot_decision_boundary(model: torch.nn.Module, X: torch.Tensor, y: torch.Ten
     plt.xlim(xx.min(), xx.max())
     plt.ylim(yy.min(), yy.max())
 
+
 def accuracy_function(y_true, y_pred):
     correct = torch.eq(y_true, y_pred).sum().item()
-    return (correct/ len(y_pred)) * 100
+    return (correct / len(y_pred)) * 100
+
+
+def print_train_timer(start, end, device=None):
+    total_time = end - start
+    print(f"Train time on Device: {device}: {total_time:.3f} seconds")
+    return total_time

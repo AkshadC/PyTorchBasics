@@ -23,6 +23,7 @@ def plot_boundary(model):
 
     plt.show()
 
+
 class SpiralModelNN(nn.Module):
     torch.manual_seed(42)
     torch.cuda.manual_seed(42)
@@ -191,7 +192,7 @@ def main():
 
 
 
-    model_0.eval()
+    model_0.eval()~
     with torch.inference_mode():
         preds = model_0(model_0.X_test)
     preds = torch.softmax(preds, dim=1).argmax(dim=1)
@@ -201,9 +202,13 @@ def main():
     print(torch_metric_acc(preds, model_0.y_test))"""
 
     model_spiral = SpiralModelNN().to(DEVICE)
+
     model_spiral.make_dataset()
+
     model_spiral.train_model(900)
+
     plot_boundary(model_spiral)
+
 
 if __name__ == "__main__":
     main()

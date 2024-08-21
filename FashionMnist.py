@@ -1,18 +1,13 @@
 import random
 import torch
-import matplotlib.pyplot as plt
 from tqdm import tqdm
 from utils import *
-import numpy as np
-import torchvision
 from torch import nn
 from torchvision import datasets
-from torchvision import transforms
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
 from torchmetrics import ConfusionMatrix
 from mlxtend.plotting import plot_confusion_matrix
-from pathlib import Path
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -187,6 +182,7 @@ def eval_model(model: torch.nn.Module,
 
 
 def main():
+    # Loading the train and test data from torchvision datasets
     train_data = datasets.FashionMNIST(root="TorchDatasets", train=True, download=True,
                                        transform=ToTensor(),
                                        target_transform=None)
@@ -194,7 +190,7 @@ def main():
     test_data = datasets.FashionMNIST(root="TorchDatasets", train=False, download=True, transform=ToTensor(),
                                       target_transform=None)
 
-    class_names = train_data.classes
+    class_names = train_data.classes  # Class names present in the dataset
     # class_names_indexed = train_data.class_to_idx
 
     # print(class_names_indexed)
@@ -202,19 +198,26 @@ def main():
 
     BATCH_SIZE = 32
 
+    # Making dataloaders for train and test
     train_data_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
     test_data_loader = DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=False)
     # print(len(train_data_loader))
     # print(len(test_data_loader))
 
+    # Initializing the CNN model
     model_1 = FashionMNISTCNN().to(DEVICE)
+
+    # Training the model
     model_1.train_model(5, train_data_loader, test_data_loader)
+
     # dummy_image = torch.randn(size=(1, 28, 28)).to(DEVICE)
     # model_1(dummy_image)
 
+    # Evaluating the model and saving the results
     model_1_results = eval_model(model_1, test_data_loader, nn.CrossEntropyLoss(), accuracy_fn=accuracy_function)
     print(model_1_results)
 
+    # Choosing 9 random samples and plotting the prediction
     test_samples = []
     test_labels = []
     for sample, label in random.sample(list(test_data), 9):
@@ -237,15 +240,20 @@ def main():
     plt.tight_layout()
     plt.show()
 
+    # Plotting the confusion matrix
     plot_confusionmatrix(make_predictions(model_1, test_data_loader), test_data, class_names)
 
+    # Saving the current best model
     torch.save(model_1.state_dict(), f="Saved_Models/FashionMnistCNNBest.pth")
     print("MODEL SAVED")
 
+    # Loading the saved model
     loaded_model = FashionMNISTCNN()
     loaded_model.load_state_dict(torch.load(f="Saved_Models/FashionMnistCNNBest.pth"))
 
     loaded_model = loaded_model.to(DEVICE)
+
+    # Predicting on the test data using the loaded model to check if it's the same parameters.
     loaded_model_results = eval_model(loaded_model, test_data_loader, nn.CrossEntropyLoss(),
                                       accuracy_fn=accuracy_function)
 

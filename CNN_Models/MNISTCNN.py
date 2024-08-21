@@ -34,13 +34,18 @@ class MNISTCNN(nn.Module):
             nn.ReLU(),
             nn.Conv2d(32, 32, 3, 1, 1),
             nn.ReLU(),
+            nn.Conv2d(32, 256, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(256, 32, 3, 1, 1),
+            nn.ReLU(),
             nn.MaxPool2d(2)
         )
         self.fcnn_stack = nn.Sequential(
             nn.Flatten(),
             nn.Linear(32*7 * 7, 32),
             nn.ReLU(),
-            nn.Linear(32, out_features=10)
+            nn.Linear(32, 4096),
+            nn.Linear(4096, out_features=10)
         )
 
     def forward(self, x):
@@ -87,7 +92,6 @@ class MNISTCNN(nn.Module):
                     test_acc += accuracy_function(y, pred.argmax(dim=1))
                 test_loss /= len(self.test_data_loader)
                 test_acc /= len(self.test_data_loader)
-            print(test_loss, prev_loss)
             if test_loss < prev_loss:
                 prev_loss = test_loss
                 epochs_till_test_loss_change = 0
@@ -188,8 +192,8 @@ class MNISTCNN(nn.Module):
 
 
 def main():
-    train_data = datasets.MNIST("TorchDatasets", train=True, transform=ToTensor(), download=True)
-    test_data = datasets.MNIST("TorchDatasets", train=False, transform=ToTensor(), download=True)
+    train_data = datasets.MNIST("../TorchDatasets", train=True, transform=ToTensor(), download=True)
+    test_data = datasets.MNIST("../TorchDatasets", train=False, transform=ToTensor(), download=True)
 
     model_1 = MNISTCNN().to(DEVICE)
     train_data_loader = DataLoader(train_data, batch_size=32, shuffle=True)

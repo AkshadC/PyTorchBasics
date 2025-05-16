@@ -42,7 +42,7 @@ class MNISTCNN(nn.Module):
         )
         self.fcnn_stack = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(32*7 * 7, 32),
+            nn.Linear(32 * 7 * 7, 32),
             nn.ReLU(),
             nn.Linear(32, 4096),
             nn.Linear(4096, out_features=10)

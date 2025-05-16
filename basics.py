@@ -20,6 +20,8 @@ def creating_tensors():
     print("Size zero tensor: ", zero_tensor.shape)
     print("Ndim zero tensor: ", zero_tensor.ndim)
 
+    #Matrix Tensor
+
     TENSOR = torch.tensor([[[1, 2, 3], [4, 5, 6], [7, 8, 9]]])
     print(f"Tensor: {TENSOR}, Shape: {TENSOR.shape}, Ndim: {TENSOR.ndim}")
 

@@ -1,10 +1,6 @@
-import os.path
-
 import torch
 from torch import nn as nn
 import matplotlib.pyplot as plt
-
-from pathlib import Path
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 

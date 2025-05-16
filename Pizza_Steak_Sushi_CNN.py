@@ -25,6 +25,7 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class FoodCNN3ClassVGG19(nn.Module):
+
     def __init__(self, train_dataset, test_dataset, batch_size, num_workers):
         super().__init__()
         self.train_data_loader, self.test_data_loader, self.train_dataset, self.test_dataset = None, None, train_dataset, test_dataset

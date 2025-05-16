@@ -143,6 +143,7 @@ class MultiClassNN(nn.Module):
 
             if test_loss < prev_loss:
                 epochs_till_no_test_loss_change = 0
+
             else:
                 epochs_till_no_test_loss_change += 1
 
@@ -182,7 +183,6 @@ class MultiClassNN(nn.Module):
         if predictions is not None:
             plt.scatter(predictions[:, 0], predictions[:, 1], c='g', label="Test Data")
         plt.show()
-
 
 def main():
     """    model_0 = MultiClassNN()
